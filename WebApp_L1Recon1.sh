@@ -21,21 +21,19 @@ echo "using wordlist at " $customwordlistpath
 
 subfinder -d $domain -all -v -o subdomains1.txt 
 cat subdomains1.txt > sD.txt
-subfinder -d $domain -v -w $customwordlistpath -o subdomains2.txt 
-cat subdomains2.txt >> sD.txt
 
 echo "Commencing Sublister"
 sublist3r -d $domain -b -t 2 -v -o subdomains3.txt
 cat subdomains3.txt >> sD.txt 
 
 echo "Commencing assetfinder"
-assetfinder --subs-only $domain | tee -a allsubdomains.txt
+assetfinder --subs-only $domain > allsubdomains.txt
+cat allsubdomains.txt >> sD.txt 
 
 echo "Commencing amass"
-amass enum -passive -d $doamin | tee -a allsubdomains1.txt
-amass enum -active -d $domain | tee -a amass_ips.txt
-cat amass_ips.txt | awk '{print $1}' | tee -a allsubdomains3.txt
-cat allsubdomains.txt >> sD.txt
+amass enum -passive -d $doamin > allsubdomains1.txt
+amass enum -active -d $domain > amass_ips.txt
+cat amass_ips.txt | awk '{print $1}' > allsubdomains3.txt
 cat allsubdomains1.txt >> sD.txt
 cat allsubdomains3.txt >> sD.txt
 cat amass_ips.txt >> sD.txt
@@ -48,8 +46,14 @@ cat sD.txt | sort -u > SDRecon.txt
 
 echo "\n\n " >> SDRecon.txt
 echo "LIVE DOMAINS \n\n" >> SDRecon.txt
-cat SDRecon.txt | httprobe >> live.txt
+cat SDRecon.txt | httprobe > live.txt
 cat live.txt >> SDRecon.txt
 
-echo "END OF SCIPT. RESULTS FOR ALL LIVE SUBDOMAINs saved in SDRecon.txt" 
+subfinder -d $domain -v -w $customwordlistpath -o subdomains2.txt 
+grep -Fxv -f SDRecon.txt subdomains2.txt > unique.txt
+echo "UNIQUE SDs FROM WORDIST \n\n"
+cat unique.txt >> SDRecon.txt
 
+rm subdomains1.txt subdomains3.txt sD.txt allsubdomains.txt amass_ips.txt output.txt live.txt subdomains2.txt unique.txt
+
+echo "END OF SCIPT. RESULTS FOR ALL LIVE SUBDOMAINs saved in SDRecon.txt" 
