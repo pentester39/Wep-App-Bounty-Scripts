@@ -44,14 +44,13 @@ cat output.txt >> sD.txt
 
 cat sD.txt | sort -u > SDRecon.txt
 
-echo "\n\n " >> SDRecon.txt
 echo "LIVE DOMAINS \n\n" >> SDRecon.txt
 cat SDRecon.txt | httprobe > live.txt
 cat live.txt >> SDRecon.txt
 
 subfinder -d $domain -v -w $customwordlistpath -o subdomains2.txt 
 grep -Fxv -f SDRecon.txt subdomains2.txt > unique.txt
-echo "UNIQUE SDs FROM WORDIST \n\n"
+echo "UNIQUE SDs FROM WORDIST \n\n" >> SDRecon.txt
 cat unique.txt >> SDRecon.txt
 
 rm subdomains1.txt subdomains3.txt sD.txt allsubdomains.txt amass_ips.txt output.txt live.txt subdomains2.txt unique.txt
