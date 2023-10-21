@@ -1,4 +1,5 @@
 # Wep-App-Bounty-Scripts by pentester39
+I welcome comments and suggested updates to these scripts. I could use a better way to display combined results.  
 Install requirements written within the scripts. RUN using sudo ./script.sh -d domain.com
 SUMMARY: Series of RECON automation scripts that take customized wordlists, templates, etc and outputs into one file - can use for Bug Bounty Web Application Testing, pentexting Apps, etc.
 WebApp_L1Recon1.sh is for SubDomain finding.
